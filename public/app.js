@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const isTablet = window.matchMedia("(max-width: 1024px)").matches;
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isTablet = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     if (isMobile || isTablet) {
         alert("Aviso: La web no tiene ads por default, pero los reproductores si. Para mejor experiencia use Brave Browser o similares.");
