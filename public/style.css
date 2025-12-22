@@ -62,6 +62,7 @@ h1 {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    width: 100%;
     transition: all 0.3s ease;
 }
 
@@ -301,4 +302,88 @@ h1 {
 
 .reproductor iframe {
     height: 500px;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+footer p {
+    font-size: 1rem;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 500;
+    color: #8d7cfe;
+    margin: 0;
+}
+
+footer a {
+    font-size: 1rem;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 500;
+    color: #8d7cfe;
+    margin: 0;
+    cursor: pointer;
+    list-style: none;
+    margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+
+    /* Simplificar buscador */
+    .simplificarBuscador {
+        margin-top: 20px;
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .simplificarBuscador h1 {
+        font-size: 2rem;
+    }
+
+    /* Simplificar anime selecionado */
+    .mostrarAnime {
+        margin-top: 20px;
+        flex-direction: column;
+        gap: 10px;
+        width: 90%;
+        align-content: center;
+    }
+
+    .mostrarAnime .infocontent {
+        max-width: 100%;
+    }
+
+    .titulo {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .sipnosis {
+        font-size: 0.9rem;
+        text-align: left;
+        margin: auto;
+        width: 90%;
+    }
+
+    .list-cap {
+        width: 90%;
+        padding: 0;
+        margin: auto;
+    }
+
+    .navServer {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .reproductor iframe {
+        height: 250px;
+    }
+
 }
