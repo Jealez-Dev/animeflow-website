@@ -1,0 +1,304 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=TASA+Orbiter:wght@400..800&family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap');
+
+body {
+    background-image: linear-gradient(to right top, #00033f, #000a59, #000b74, #00088f, #0600ab);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+
+h1 {
+    color: #8d7cfe;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 60px;
+    aspect-ratio: 2;
+    --_g: no-repeat radial-gradient(circle closest-side, #8d7cfe 90%, #0000);
+    background:
+        var(--_g) 0% 50%,
+        var(--_g) 50% 50%,
+        var(--_g) 100% 50%;
+    background-size: calc(100%/3) 50%;
+    animation: l3 1s infinite linear;
+    position: absolute;
+    margin: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes l3 {
+    20% {
+        background-position: 0% 0%, 50% 50%, 100% 50%
+    }
+
+    40% {
+        background-position: 0% 100%, 50% 0%, 100% 50%
+    }
+
+    60% {
+        background-position: 0% 50%, 50% 100%, 100% 0%
+    }
+
+    80% {
+        background-position: 0% 50%, 50% 50%, 100% 100%
+    }
+}
+
+/* CSS para el buscador de animes y efecto navbar */
+
+.buscador {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    transition: all 0.3s ease;
+}
+
+.simplificarBuscador {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    height: auto;
+}
+
+.simplificarBuscador h1 {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.animeSearch {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.simplyForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    height: auto;
+}
+
+.animeName {
+    padding: 15px;
+    margin: 10px;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    background-color: transparent;
+    border: 2px solid #8d7cfe;
+    font-family: 'Google Sans', sans-serif;
+    color: #8d7cfe;
+    transition: all 0.3s ease;
+}
+
+.animeNameNav {
+    font-size: 1.1rem;
+}
+
+.animeName:focus {
+    outline: none;
+    border: 2px solid #8d7cfe;
+    filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.5));
+}
+
+/* CSS para la lista de animes */
+
+.resultados {
+    width: 100%;
+}
+
+.nombre_anime {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.card {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    height: auto;
+    background-color: #8d7cfe3b;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    max-width: 290px;
+}
+
+.card:hover {
+    background-color: #8d7cfe;
+    transform: scale(1.05);
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+}
+
+.card p {
+    font-size: 1rem;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 500;
+    color: #8d7cfe;
+    margin: 0;
+    text-align: center;
+}
+
+.card:hover p {
+    color: #fff;
+}
+
+.card img {
+    width: 290px;
+    height: 370px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* CSS información anime + lista de capitulos */
+
+.mostrarAnime {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin: auto;
+    background-color: #8d7cfe3b;
+    border-radius: 10px;
+    width: 80%;
+    flex-wrap: wrap;
+    padding-top: 30px;
+}
+
+.infocontent {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex-wrap: wrap;
+    max-width: 50%;
+}
+
+.esconderAnime {
+    display: none;
+}
+
+.img {
+    height: 400px;
+    border-radius: 10px;
+}
+
+.titulo {
+    font-size: 2rem;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 700;
+    color: #8d7cfe;
+    margin: 0;
+
+}
+
+.sipnosis {
+    font-size: 1rem;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 500;
+    color: #8d7cfe;
+    margin: 0;
+}
+
+.cap {
+    margin: auto;
+}
+
+.list-cap {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.ep {
+    font-size: 1rem;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 500;
+    color: #8d7cfe;
+    margin: 0;
+    cursor: pointer;
+    list-style: none;
+    margin-bottom: 5px;
+}
+
+.ep:hover {
+    color: #fff;
+}
+
+.ep:active {
+    color: #fff;
+}
+
+.navServer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
+    background-color: #8d7cfe;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.navServer li {
+    list-style: none;
+    cursor: pointer;
+}
+
+.navServer a {
+    font-size: 1rem;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+    cursor: pointer;
+    list-style: none;
+    margin-bottom: 5px;
+}
+
+.navServer a:hover {
+    color: #fff;
+}
+
+.navServer a:active {
+    color: #fff;
+}
+
+.reproductor {
+    width: 80%;
+}
+
+.reproductor iframe {
+    height: 500px;
+}
