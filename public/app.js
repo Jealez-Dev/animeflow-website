@@ -146,7 +146,6 @@ async function selectCap(anime, ep) {
     iframe.frameBorder = "0";
     iframe.setAttribute("allow", "autoplay");
     iframe.setAttribute("allowfullscreen", "true");
-    iframe.sandbox = "allow-scripts allow-same-origin allow-forms";
     reproductor.appendChild(iframe);
 }
 

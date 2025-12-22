@@ -240,6 +240,7 @@ h1 {
     flex-wrap: wrap;
     height: 300px;
     overflow-y: scroll;
+    padding: 0;
 }
 
 .ep {
@@ -384,6 +385,11 @@ footer a {
 
     .reproductor iframe {
         height: 250px;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 10px;
     }
 
 }
