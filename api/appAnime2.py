@@ -1,6 +1,7 @@
 import requests
 import re
 import json
+import random
 
 
 class Anime():
@@ -111,6 +112,76 @@ class Anime():
         except Exception as e:
             print(e)
 
+    def anime_random(self):
+        try:
+            response = requests.get("https://www3.animeflv.net/")
+            if response.status_code == 200:
+                html = response.text
+
+                titulos = []
+                tituloMatch = re.finditer(r'<h3 class="Title">(.*?)</h3>', html, re.DOTALL)
+                for titulo in tituloMatch:
+                    titulo = titulo.group(1)
+                    titulos.append(titulo)
+
+                titulo_random = random.choice(titulos)
+
+                portada = ""
+                img = re.finditer(rf'<img [^>]*src="([^"]*)" [^>]*alt="{re.escape(titulo_random)}"', html, re.DOTALL)
+                for i in img:
+                    i = i.group(1)
+                    portada = f"https://www3.animeflv.net/{i}"
+
+                sipnosis = ""
+                sipnosisMatch = re.finditer(r'<div class="Description">.*?<p>.*?</p>.*?<p>(.*?)</p>', html, re.DOTALL)
+                
+                descripcion = ""
+                for match in sipnosisMatch:
+                    divTitulo = match.group(0)
+                    if re.search(titulo_random, divTitulo):
+                        descripcion = match.group(1)
+                        break
+
+
+                info = []
+                info.append({"Titulo": titulo_random, "Sipnosis": descripcion, "Img": portada})
+                return info 
+            else:
+                print("Error al obtener la página web")
+            
+        except Exception as e:
+            print(e)
+
+    def animes_Recientes(self):
+        try:
+            response = requests.get("https://www3.animeflv.net/")
+            if response.status_code == 200:
+                html = response.text
+
+                titulos = []
+                tituloMatch = re.finditer(r'<h3 class="Title">(.*?)</h3>', html, re.DOTALL)
+                for titulo in tituloMatch:
+                    titulo = titulo.group(1)
+                    titulos.append(titulo)
+
+                portadas = []
+                patron = r'<article[^>]*>.*?<figure>.*?<img src="([^"]*)"[^>]*alt="(.*?)"'
+
+                matches = re.finditer(patron, html, re.DOTALL)
+
+                for match in matches:
+                    img_url = match.group(1)
+                    portadas.append(f"https://www3.animeflv.net{img_url}")
+
+                info = []
+                info.append({"Titulo": titulos, "Img": portadas})
+                return info 
+            else:
+                print("Error al obtener la página web")
+        except Exception as e:
+            print(e)
+
+
     def name_to_url(self, name_anime):
         try:
             name = name_anime
@@ -119,3 +190,6 @@ class Anime():
             return name
         except Exception as e:
             print(e)
+
+anime = Anime()
+anime.animes_Recientes()
