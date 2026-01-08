@@ -17,7 +17,7 @@ function Browse() {
 
     useEffect(() => {
         const fetchAnimes = async () => {
-            fetch(`http://localhost:8000/api/BuscarAnime`, {
+            fetch(`/api/BuscarAnime`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ function ver() {
     const navigate = useNavigate();
 
     const fetchCap = () => {
-        fetch('http://localhost:8000/api/SeleccionCap', {
+        fetch('/api/SeleccionCap', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

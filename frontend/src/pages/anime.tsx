@@ -21,7 +21,7 @@ function anime() {
     console.log(id);
 
     const fetchAnimes = async () => {
-        fetch(`http://localhost:8000/api/SeleccionAnime`, {
+        fetch(`/api/SeleccionAnime`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

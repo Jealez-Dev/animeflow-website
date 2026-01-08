@@ -19,7 +19,7 @@ function Home() {
     const [loading, setLoading] = useState(true);
 
     const Hero = async () => {
-        const respuesta = await fetch('http://localhost:8000/api/AnimeRandom', {
+        const respuesta = await fetch('/api/AnimeRandom', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ function Home() {
     }
 
     const ListRecientes = async () => {
-        const respuesta = await fetch('http://localhost:8000/api/AnimesRecientes', {
+        const respuesta = await fetch('/api/AnimesRecientes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

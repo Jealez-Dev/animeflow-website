@@ -1,12 +1,26 @@
 {
+    "version": 2,
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/api/main.py"
+            "destination": "backend/main.py"
         },
         {
-            "source": "(.*)",
-            "destination": "/public/$1"
+            "source": "/(.*)",
+            "destination": "/frontend/dist/$1"
+        }
+    ],
+    "builds": [
+        {
+            "src": "backend/main.py",
+            "use": "@vercel/python"
+        },
+        {
+            "src": "frontend/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "dist"
+            }
         }
     ]
 }
