@@ -618,3 +618,78 @@ body {
 .construction img {
     height: 400px;
 }
+
+/* version movil: portrait */
+
+@media (max-width: 768px) {
+
+    .header {
+        width: auto;
+    }
+
+
+    .hero {
+        display: none;
+    }
+
+    .listAnimes {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .recientes hr {
+        display: none;
+    }
+
+    .recientes-item {
+        width: 30%;
+    }
+
+    .recientes-item img {
+        height: 200px;
+        border-radius: 5px;
+        width: 117px;
+    }
+
+    .recientes-item p {
+        font-size: 0.9rem;
+    }
+
+    /* /anime */
+
+    .anime-item {
+        width: auto;
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }
+
+    .anime-item h2 {
+        font-size: 1.5rem;
+    }
+
+    .anime-item p {
+        font-size: 0.9rem;
+        -webkit-line-clamp: 3;
+    }
+
+    .episodes-title {
+        font-size: 1.4rem;
+    }
+
+    .episodes-title hr {
+        display: none;
+    }
+
+    /* /browse */
+
+    .browse {
+        margin-left: 0rem;
+        margin-right: 0rem;
+    }
+
+    .browse-title {
+        font-size: 1.5rem;
+        margin-left: 1rem;
+    }
+
+}

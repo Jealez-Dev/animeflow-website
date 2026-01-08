@@ -125,12 +125,13 @@ function ver() {
 
     const FullScreen = () => {
         const iframe = document.querySelector('.btn-fullscreen')
+        const video = document.querySelector('.player-container') as any
         setStatusFullscreen(!status)
 
         if (status) {
             document.exitFullscreen()
         } else {
-            document.documentElement.requestFullscreen()
+            video?.requestFullscreen()
         }
     }
 
