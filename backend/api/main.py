@@ -32,7 +32,22 @@ async def anime(anime: Anime):
 @app.post("/api/SeleccionCap")
 async def anime(anime: Anime):
     animeAPP = appAnime2.Anime()
-    return {"Url": animeAPP.select_cap(anime.nombre_anime, anime.selectEP)}
+    return {"Url": animeAPP.select_cap(anime.nombre_anime)}
+
+@app.post("/api/AnimeRandom")
+async def anime():
+    animeAPP = appAnime2.Anime()
+    return {"Informacion": animeAPP.anime_random()}
+
+@app.post("/api/AnimesRecientes")
+async def anime():
+    animeAPP = appAnime2.Anime()
+    return {"Informacion": animeAPP.animes_Recientes()}
+
+@app.post("/api/Wallpaper")
+async def anime(anime: Anime):
+    animeAPP = appAnime2.Anime()
+    return {"Wallpaper": animeAPP.wallpaper(anime.nombre_anime)}
 
 if os.path.exists("public"):
     app.mount("/", StaticFiles(directory="public", html=True), name="public")

@@ -7,6 +7,82 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Aviso: La web no tiene ads por default, pero los reproductores si. Para mejor experiencia use Brave Browser o similares.");
     }
 
+    async function animeRandom() {
+        const respuesta = await fetch("/api/AnimeRandom", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const datos = await respuesta.json();
+
+        Portada = document.querySelector(".hero-img");
+        Portada.src = datos.Informacion[0].Img;
+
+        Titulo = document.querySelector(".anime-title");
+        Titulo.textContent = datos.Informacion[0].Titulo;
+
+        Subtitulo = document.querySelector(".anime-subtitle");
+        Subtitulo.textContent = datos.Informacion[0].Sipnosis;
+
+    }
+
+    animeRandom();
+
+    async function animeRecientes() {
+        const respuesta = await fetch("/api/AnimesRecientes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const datos = await respuesta.json();
+
+        const ul = document.createElement("ul");
+        ul.classList.add("Anime-List");
+
+        animes = datos.Informacion;
+
+        animes.forEach(anime => {
+            anime.Titulo.forEach((titulo, i) => {
+                const li = document.createElement("li");
+                li.innerHTML = `<img src="${anime.Img[i]}" alt="${titulo}">
+                <p>${titulo}</p>`;
+                li.classList.add("recientes-item");
+                ul.appendChild(li);
+            });
+        });
+
+        const recientes = document.querySelector(".recientes-list");
+        recientes.appendChild(ul);
+
+        /* Resplandor dinamico en las cards de los animes recientes */
+        document.querySelectorAll(".recientes-item").forEach(item => {
+            const imgSource = item.querySelector("img");
+            console.log(imgSource.src);
+
+            const blur = () => {
+                item.style.setProperty("--img-source", `url(${imgSource.src})`);
+                console.log(imgSource.src);
+            };
+
+            if (imgSource.complete) {
+                blur();
+            } else {
+                imgSource.addEventListener("load", blur);
+            }
+
+        });
+
+    }
+
+    animeRecientes();
+
+
+
+
     document.getElementById("animeSearch").addEventListener("submit", async function (e) {
         e.preventDefault();
 
