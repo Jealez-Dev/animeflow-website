@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading2";
+import FullScreenSvg from "../components/fullscreensvg";
 
 function ver() {
 
@@ -11,6 +12,11 @@ function ver() {
     const [overlay, setOverlay] = useState(false)
     const [server, setServer] = useState('')
     const [Capitulos, setCapitulos] = useState()
+    const [status, setStatusFullscreen] = useState(false)
+    const [color, setColor] = useState('#8b8b8b')
+    const [hideBtnsAll, setHideBtnsAll] = useState(false)
+    const [titulo, setTitulo] = useState('')
+    const [styleBtns, setStyleBtns] = useState({ opacity: 1 })
     const navigate = useNavigate();
 
     const fetchCap = () => {
@@ -30,7 +36,7 @@ function ver() {
     };
 
     const fetchCapitulos = async (anime: string) => {
-        fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(id || '')}&limit=1`, {
+        fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(anime || '')}&limit=1`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,6 +45,7 @@ function ver() {
             .then((response) => response.json())
             .then((data) => {
                 setCapitulos(data.data[0].episodes)
+                setTitulo(data.data[0].title)
                 setLoading(false);
             })
     };
@@ -116,6 +123,17 @@ function ver() {
 
     }
 
+    const FullScreen = () => {
+        const iframe = document.querySelector('.btn-fullscreen')
+        setStatusFullscreen(!status)
+
+        if (status) {
+            document.exitFullscreen()
+        } else {
+            document.documentElement.requestFullscreen()
+        }
+    }
+
     const changeServer = urls.find(
         item => item.nombre === server
     )
@@ -127,9 +145,31 @@ function ver() {
         fetchCapitulos(id ? id?.slice(0, id.lastIndexOf('-')) : '');
     }, [id, episodio]);
 
+    useEffect(() => {
+
+        let timer = setTimeout(() => { }, 0);
+
+        const showBtns = () => {
+            setHideBtnsAll(false)
+            setStyleBtns({ opacity: 1 })
+
+            clearTimeout(timer)
+
+            timer = setTimeout(() => {
+                setHideBtnsAll(true)
+                setStyleBtns({ opacity: 0 })
+            }, 2100)
+        }
+
+        window.addEventListener('mousemove', showBtns)
+
+        return () => { clearTimeout(timer); window.removeEventListener('mousemove', showBtns) }
+
+    }, []);
+
     return (
         <div className="player-container">
-            <div className="btns">
+            <div className="btns" style={styleBtns}>
                 <button className="btn-back" onClick={() => navigate(`/anime/${id?.slice(0, id.lastIndexOf('-'))}`)}>X</button>
                 <div className="servers">
                     <button className="btn-info" onClick={verServers}>Cambiar servidor</button>
@@ -141,20 +181,26 @@ function ver() {
                         ))}
                     </ul>
                 </div>
+                <button className="btn-fullscreen" onClick={FullScreen} onMouseEnter={() => setColor('#9330ef')} onMouseLeave={() => setColor('#8b8b8b')} ><FullScreenSvg color={color} status={status} /></button>
             </div>
 
-            <div className="btns-caps">
+            <div className="btns-caps" style={styleBtns}>
                 <button className="btn-backCap" onClick={BackCap}>←</button>
                 <button className="btn-nextCap" onClick={NextCap}>→</button>
             </div>
 
+            <div className="meta" style={styleBtns}>
+                <h3>{titulo}</h3>
+                <p>{`Capítulo ${parseInt(id?.match(/\d+$/)?.[0] || "0")}`}</p>
+            </div>
+
+            <div className="bacground" style={styleBtns}></div>
 
             {loading ? <Loading /> : <div className="iframe">
                 {urls.length > 0 && (
                     <iframe
                         className="video-iframe"
                         src={changeServer ? changeServer.url : urls[0].url}
-                        allowFullScreen
                     />
                 )}
             </div>}

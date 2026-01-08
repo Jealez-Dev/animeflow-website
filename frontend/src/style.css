@@ -540,6 +540,58 @@ body {
     backdrop-filter: blur(10px);
 }
 
+.btn-fullscreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-fullscreen img {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    object-position: center;
+    filter: hue-rotate(270deg) !important;
+}
+
+.meta {
+    position: absolute;
+    bottom: 10%;
+    left: 0;
+    z-index: 11;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.meta h3 {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+    user-select: none;
+}
+
+.meta p {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0;
+    user-select: none;
+}
+
+.bacground {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    background: rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    transition: all ease-in-out 0.3s;
+}
+
 .video-iframe {
     width: 100%;
     height: 100%;
