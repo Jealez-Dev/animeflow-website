@@ -218,14 +218,3 @@ class Anime():
                 print("Error al obtener la página web")
         except Exception as e:
             print(e)
-
-
-    def name_to_url(self, name_anime):
-        try:
-            name = name_anime
-            name = re.sub(r"[-:!?'()]", "", name)
-            name = name.replace(" ", "-").lower()
-            return name
-        except Exception as e:
-            print(e)
-
