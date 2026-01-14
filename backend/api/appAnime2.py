@@ -135,7 +135,7 @@ class Anime():
         try:
             url = f"https://jkanime.net/{name_anime}"
             api_key = os.getenv("SCRAPING_API_KEY")
-            response = requests.get(f"https://api.webscraping.ai/html?api_key={api_key}&url={url}&js=false&proxy=datacenter")
+            response = requests.get(f"https://api.webscraping.ai/html?api_key={api_key}&url={url}&js=false&proxy=residential&country=es")
             if response.status_code == 200:
                 estado = re.search(r'<span>Estado:<\/span>\s*<div[^>]*>([^<]+)<\/div>', response.text)
                 print(estado.group(1))
