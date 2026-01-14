@@ -89,7 +89,7 @@ async def anime(anime: Anime):
     animeAPP = appAnime2.Anime()
     response = supabase.table("episodios").select("*").eq("id_episodio", anime.selectEP).maybe_single().execute()
     if response is None or response.data is None:
-        links = animeAPP.select_cap(anime.selectEP, anime.nombre_anime)
+        links = animeAPP.select_cap(anime.nombre_anime)
         supabase.table("episodios").upsert({
             "id_episodio": anime.selectEP,
             "anime_slug": anime.nombre_anime,
