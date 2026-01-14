@@ -96,6 +96,7 @@ async def anime(anime: Anime):
             "links": links,
             "created_at": datetime.now(timezone.utc).isoformat()
         }).execute()
+        return {"Url": links}
     else:
         links = response.data["links"]
         return {"Url": links}
