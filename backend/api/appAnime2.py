@@ -131,7 +131,15 @@ class Anime():
 
     def estadoAnime(self, name_anime):
         try:
-            response = cloudscraper.create_scraper(delay=15).get(f"https://jkanime.net/{name_anime}")
+            response = curl_requests.get(f"https://jkanime.net/{name_anime}", impersonate="chrome110",
+            headers={
+                "Referer": "https://jkanime.net/",
+                "Accept-Language": "es-ES,es;q=0.9",
+                "Sec-Fetch-Dest": "document",
+                "Sec-Fetch-Mode": "navigate",
+                "Sec-Fetch-Site": "same-origin",
+                "Sec-Fetch-User": "?1",
+            }, timeout=15)
             if response.status_code == 200:
                 estado = re.search(r'<span>Estado:<\/span>\s*<div[^>]*>([^<]+)<\/div>', response.text)
                 print(estado.group(1))
@@ -143,7 +151,16 @@ class Anime():
 
     def calidad_1080(self, name_anime):
         try:
-            response = curl_requests.get(f"https://jkanime.net/{name_anime}", impersonate="chrome110", timeout=15)
+
+            response = curl_requests.get(f"https://jkanime.net/{name_anime}", impersonate="chrome110",
+            headers={
+                "Referer": "https://jkanime.net/",
+                "Accept-Language": "es-ES,es;q=0.9",
+                "Sec-Fetch-Dest": "document",
+                "Sec-Fetch-Mode": "navigate",
+                "Sec-Fetch-Site": "same-origin",
+                "Sec-Fetch-User": "?1",
+            }, timeout=15)
             print(f"https://jkanime.net/{name_anime}")
 
             if response.status_code == 200:
@@ -162,7 +179,15 @@ class Anime():
     
     def Caps_1080(self, name_anime, cap):
         try:
-            response = curl_requests.get(f"https://jkanime.net/{name_anime}", impersonate="chrome110", timeout=15)
+            response = curl_requests.get(f"https://jkanime.net/{name_anime}", impersonate="chrome110",
+            headers={
+                "Referer": "https://jkanime.net/",
+                "Accept-Language": "es-ES,es;q=0.9",
+                "Sec-Fetch-Dest": "document",
+                "Sec-Fetch-Mode": "navigate",
+                "Sec-Fetch-Site": "same-origin",
+                "Sec-Fetch-User": "?1",
+            }, timeout=15)
             html = response.text
 
             if response.status_code == 200:
