@@ -114,7 +114,7 @@ class Anime():
                 print("Date fa-calendar" in html) # ¿Existe la clase?
 
                 date_next_ep = ""
-                estado = self.estadoAnime(name_anime)
+                estado, calidad = self.estadoAnime(name_anime)
                 print(estado)
                 if estado == "En emision":
                     print("paso por aca")
@@ -126,7 +126,7 @@ class Anime():
                 else:
                     estado = False
 
-            info.append({"Titulo": titulo, "Sipnosis": sipnosis1, "Img": imgs, "Estado": estado, "Cap": listEps, "Date": date_next_ep})
+            info.append({"Titulo": titulo, "Sipnosis": sipnosis1, "Img": imgs, "Estado": estado, "Calidad": calidad, "Cap": listEps, "Date": date_next_ep})
             return info 
         except Exception as e:
             print(e)
@@ -139,36 +139,19 @@ class Anime():
             if response.status_code == 200:
                 estado = re.search(r'<span>Estado:<\/span>\s*<div[^>]*>([^<]+)<\/div>', response.text)
                 print(estado.group(1))
-                return estado.group(1)
-            else:
-                return False
-        except Exception as e:
-            print(e)
 
-    def calidad_1080(self, name_anime):
-        try:
-
-            url = f"https://jkanime.net/{name_anime}"
-            api_key = os.getenv("SCRAPING_API_KEY")
-            response = requests.get(f"https://api.webscraping.ai/html?api_key={api_key}&url={url}&js=false&proxy=datacenter")
-
-            if response.status_code == 200:
-                print("¡Conexión exitosa!")
-                html = response.text
-
-                calidad = re.search(r'<span>Calidad:</span>\s*([\w\s]+)', html)
+                calidad = re.search(r'<span>Calidad:</span>\s*([\w\s]+)', response.text)
                 calidad = calidad.group(1) if calidad else "1080p"
-                return calidad
-            else:
-                print("Error al obtener la página web", response.status_code)
-                return False
+                return calidad, estado.group(1)
 
+            else:
+                return False
         except Exception as e:
             print(e)
     
     def Caps_1080(self, name_anime, cap):
         try:
-            url = f"https://jkanime.net/{name_anime}"
+            url = f"https://jkanime.net/{name_anime}/{cap}"
             api_key = os.getenv("SCRAPING_API_KEY")
             response = requests.get(f"https://api.webscraping.ai/html?api_key={api_key}&url={url}&js=false&proxy=datacenter")
             html = response.text
@@ -194,7 +177,7 @@ class Anime():
         except Exception as e:
             print(e)
         
-    def select_cap(self, name_anime, slugJK, calidad):
+    def select_cap(self, name_anime):
         try:
             info = []
             response = requests.get(f"https://www3.animeflv.net/ver/{name_anime}")
@@ -212,20 +195,7 @@ class Anime():
                 for s in lista_servidores:
                     info.append({"nombre": s.get('title'), "url": s.get('code')})
 
-                print(info)
-
-                if calidad == "1080p":
-                    match = re.search(r'(\d+)$', name_anime)
-                    cap = match.group(1)
-                    print(cap)
-                    
-                    cap1080 = self.Caps_1080(slugJK, cap)
-                    info.append({"nombre": "Desu 1080p", "url": cap1080[0]})
-                    info.append({"nombre": "Maru 1080p", "url": cap1080[1]})
-                    print(info)
-                    return info
-                else:
-                    return info
+                return info
             else:
                 print("Error al obtener la página web", response.status_code)
                 

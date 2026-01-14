@@ -135,11 +135,31 @@ function ver() {
         item => item.nombre === server
     )
 
+    const extraerServidoresHD = async () => {
+        const url = id?.slice(0, id.lastIndexOf('-'))
+        const cap = id?.match(/\d+$/)?.[0]
+        const response = await fetch(`/proxy/${url}/${cap}`)
+        const data = await response.json()
+        const regex = /video\[\d+\]\s*=\s*'<iframe.*?src="([^"]+)"/g;
+
+        let servidoresHD = []
+        let match;
+
+        while (match = regex.exec(data)) {
+            servidoresHD.push(match[1])
+        }
+
+        console.log(servidoresHD)
+    }
+
+
+
     disableNavBtns()
 
     useEffect(() => {
         fetchCap();
         fetchCapitulos(id ? id?.slice(0, id.lastIndexOf('-')) : '');
+        extraerServidoresHD()
         console.log(urls)
     }, [id, episodio]);
 

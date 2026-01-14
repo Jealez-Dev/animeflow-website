@@ -25,6 +25,10 @@
         {
             "source": "/((?!api/).*)",
             "destination": "/frontend/index.html"
+        },
+        {
+            "source": "/proxy/:path*",
+            "destination": "https://jkanime.net/:path*"
         }
     ]
 }

@@ -55,7 +55,6 @@ async def anime(anime: Anime):
 
     if actualizar:
         anime_info = animeAPP.select_anime(anime.nombre_anime)
-        calidad = animeAPP.calidad_1080(anime.nombre_anime)
         fecha_next_cap = None
         caps_actuales = len(anime_info[0].get("Cap", [{}])[0].get("Num", []))
 
@@ -68,17 +67,17 @@ async def anime(anime: Anime):
             if caps_actuales > caps_guardados:
                 fecha_next_cap = datetime.fromisoformat(anime_info[0]["Date"]).replace(tzinfo=timezone.utc)
             else:
-                fecha_next_cap = (datetime.now(timezone.utc) + timedelta(hours=1)).replace(tzinfo=timezone.utc)
+                fecha_next_cap = (datetime.now(timezone.utc) + timedelta(hours=8)).replace(tzinfo=timezone.utc)
             
         supabase.table("animes").upsert({
                 "slug": anime.nombre_anime,
                 "info": anime_info,
-                "calidad": calidad,
+                "calidad": anime_info[0]["Calidad"],
                 "estado": anime_info[0]["Estado"],
                 "date_next_cap": fecha_next_cap.isoformat() if fecha_next_cap else None,
                 "Capitulos": caps_actuales
             }).execute()
-        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"], "Calidad": calidad}
+        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"], "Calidad": anime_info[0]["Calidad"]}
     else:
         anime_info = response.data["info"]
         calidad = response.data["calidad"]
@@ -90,9 +89,7 @@ async def anime(anime: Anime):
     animeAPP = appAnime2.Anime()
     response = supabase.table("episodios").select("*").eq("id_episodio", anime.selectEP).maybe_single().execute()
     if response is None or response.data is None:
-        calidad = supabase.table("animes").select("calidad").eq("slug", anime.nombre_anime).maybe_single().execute()
-        calidad = calidad.data["calidad"]
-        links = animeAPP.select_cap(anime.selectEP, anime.nombre_anime, calidad)
+        links = animeAPP.select_cap(anime.selectEP, anime.nombre_anime)
         supabase.table("episodios").upsert({
             "id_episodio": anime.selectEP,
             "anime_slug": anime.nombre_anime,
