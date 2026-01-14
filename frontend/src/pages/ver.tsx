@@ -29,7 +29,7 @@ function ver() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ nombre_anime: id }),
+            body: JSON.stringify({ nombre_anime: id?.slice(0, id.lastIndexOf('-')) || '', selectEP: id }),
         })
             .then(response => response.json())
             .then((data) => {
@@ -140,6 +140,7 @@ function ver() {
     useEffect(() => {
         fetchCap();
         fetchCapitulos(id ? id?.slice(0, id.lastIndexOf('-')) : '');
+        console.log(urls)
     }, [id, episodio]);
 
     useEffect(() => {
@@ -163,6 +164,7 @@ function ver() {
         return () => { clearTimeout(timer); window.removeEventListener('mousemove', showBtns) }
 
     }, []);
+
 
     useEffect(() => {
         window.addEventListener('resize', () => setIsMobile(mediaQuery.matches))

@@ -24,7 +24,7 @@ function Home() {
 
     const Hero = async () => {
         const respuesta = await fetch('/api/AnimeRandom', {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -38,7 +38,7 @@ function Home() {
 
     const ListRecientes = async () => {
         const respuesta = await fetch('/api/AnimesRecientes', {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
+import SvgHd from "../components/svg_hd";
 
 interface Anime {
     Titulo: string;
@@ -17,6 +18,8 @@ function anime() {
     const [imagenes, setImagenes] = useState([]);
     const [madurez, setMadurez] = useState('');
     const [score, setScore] = useState('');
+    const [calidad, setCalidad] = useState('');
+    const [estado, setEstado] = useState('');
     const [loading, setLoading] = useState(true);
 
     const fetchAnimes = async () => {
@@ -33,6 +36,8 @@ function anime() {
                 const info_capitulos = data.Informacion[0].Cap[0];
                 setCap(info_capitulos.Num);
                 setScreenshots(info_capitulos.Screen);
+                setCalidad(data.Calidad);
+                setEstado(data.Estado);
                 setLoading(false);
             })
     };
@@ -66,6 +71,11 @@ function anime() {
         if (madurez.includes('Rx')) return 'Adulto';
     };
 
+    const resoluciones = () => {
+        if (calidad == null) return '480p';
+        return calidad === '1080p' ? <SvgHd isHd={true} /> : <SvgHd isHd={false} />;
+    };
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -86,6 +96,8 @@ function anime() {
                                 <div className="anime-item-info">
                                     <p className="rating">Madurez: {clasificacionEdad()}</p>
                                     <p className="score">Score: {score}</p>
+                                    <span className="calidad">Calidad: {resoluciones()}</span>
+                                    <p className="estado">Estado: <span className={estado ? "emitiendo" : "finish"}>{estado ? "En Emisión" : 'Finalizado'}</span></p>
                                 </div>
                                 <p>{animes[0].Sipnosis}</p>
                             </div>

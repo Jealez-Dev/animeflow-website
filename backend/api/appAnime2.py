@@ -2,6 +2,7 @@ import requests
 import re
 import json
 import random
+import cloudscraper
 
 
 class Anime():
@@ -107,15 +108,85 @@ class Anime():
                     title = title.group(1)
                     titulo = title
 
+                print("Date fa-calendar" in html) # ¿Existe la clase?
 
-            info.append({"Titulo": titulo, "Sipnosis": sipnosis1, "Img": imgs, "Cap": listEps})
+                date_next_ep = ""
+                estado = self.estadoAnime(name_anime)
+                print(estado)
+                if estado == "En emision":
+                    print("paso por aca")
+                    date_next_ep = re.search(r'var\s+anime_info\s*=\s*(\[.*?\]);', html, re.DOTALL)
+                    date_next_ep = date_next_ep.group(1).strip()
+                    date_next_ep = json.loads(date_next_ep)
+                    date_next_ep = date_next_ep[3]
+                    estado = True
+                else:
+                    estado = False
+
+            info.append({"Titulo": titulo, "Sipnosis": sipnosis1, "Img": imgs, "Estado": estado, "Cap": listEps, "Date": date_next_ep})
             return info 
         except Exception as e:
             print(e)
-        
-    def select_cap(self, name_anime):
-        try:
 
+    def estadoAnime(self, name_anime):
+        try:
+            response = cloudscraper.create_scraper(delay=15).get(f"https://jkanime.net/{name_anime}")
+            if response.status_code == 200:
+                estado = re.search(r'<span>Estado:<\/span>\s*<div[^>]*>([^<]+)<\/div>', response.text)
+                print(estado.group(1))
+                return estado.group(1)
+            else:
+                return False
+        except Exception as e:
+            print(e)
+
+    def calidad_1080(self, name_anime):
+        try:
+            response = cloudscraper.create_scraper(delay=30).get(f"https://jkanime.net/{name_anime}")
+            print(f"https://jkanime.net/{name_anime}")
+
+            if response.status_code == 200:
+                print("¡Conexión exitosa! El navegador se abrió correctamente.")
+                html = response.text
+
+                calidad = re.search(r'<span>Calidad:</span>\s*([\w\s]+)', html)
+                calidad = calidad.group(1) if calidad else "1080p"
+                return calidad
+            else:
+                print("Error al obtener la página web", response.status_code)
+                return False
+
+        except Exception as e:
+            print(e)
+    
+    def Caps_1080(self, name_anime, cap):
+        try:
+            response = cloudscraper.create_scraper(delay=15).get(f"https://jkanime.net/{name_anime}/{cap}")
+            html = response.text
+
+            if response.status_code == 200:
+                html = response.text
+
+                encontrados = re.findall(r"video\[\d+\]\s*=\s*['\"](<iframe.*?>)<\/iframe>['\"]\s*;", html)
+    
+                if encontrados: 
+                    links_limpios = []
+                    for item in encontrados:
+                        src_match = re.search(r'src="([^"]+)"', item)
+                        if src_match:
+                            links_limpios.append(src_match.group(1))
+        
+                    return links_limpios
+                else:
+                    print("Error al obtener la página web", response.status_code)
+
+            else:
+                print("Error al obtener la página web", response.status_code)   
+        except Exception as e:
+            print(e)
+        
+    def select_cap(self, name_anime, slugJK, calidad):
+        try:
             info = []
             response = requests.get(f"https://www3.animeflv.net/ver/{name_anime}")
             print(name_anime)
@@ -132,6 +203,20 @@ class Anime():
                 for s in lista_servidores:
                     info.append({"nombre": s.get('title'), "url": s.get('code')})
 
+                print(info)
+
+                if calidad == "1080p":
+                    match = re.search(r'(\d+)$', name_anime)
+                    cap = match.group(1)
+                    print(cap)
+                    
+                    cap1080 = self.Caps_1080(slugJK, cap)
+                    info.append({"nombre": "Desu 1080p", "url": cap1080[0]})
+                    info.append({"nombre": "Maru 1080p", "url": cap1080[1]})
+                    print(info)
+                    return info
+                else:
+                    return info
             else:
                 print("Error al obtener la página web", response.status_code)
                 
