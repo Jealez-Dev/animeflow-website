@@ -4,11 +4,12 @@ import json
 import random
 import cloudscraper
 from curl_cffi import requests as curl_requests
+from dotenv import load_dotenv
 
 
 class Anime():
     def __init__(self):
-        pass
+        load_dotenv()
 
     def Buscar_anime(self, name_anime):
         try:
@@ -131,15 +132,9 @@ class Anime():
 
     def estadoAnime(self, name_anime):
         try:
-            response = curl_requests.get(f"https://jkanime.net/{name_anime}", impersonate="chrome110",
-            headers={
-                "Referer": "https://jkanime.net/",
-                "Accept-Language": "es-ES,es;q=0.9",
-                "Sec-Fetch-Dest": "document",
-                "Sec-Fetch-Mode": "navigate",
-                "Sec-Fetch-Site": "same-origin",
-                "Sec-Fetch-User": "?1",
-            }, timeout=15)
+            url = f"https://jkanime.net/{name_anime}"
+            api_key = os.getenv("SCRAPING_API_KEY")
+            response = requests.get(f"https://api.webscraping.ai/html?api_key={api_key}&url={url}&js=false&proxy=datacenter")
             if response.status_code == 200:
                 estado = re.search(r'<span>Estado:<\/span>\s*<div[^>]*>([^<]+)<\/div>', response.text)
                 print(estado.group(1))
@@ -152,19 +147,12 @@ class Anime():
     def calidad_1080(self, name_anime):
         try:
 
-            response = curl_requests.get(f"https://jkanime.net/{name_anime}", impersonate="chrome110",
-            headers={
-                "Referer": "https://jkanime.net/",
-                "Accept-Language": "es-ES,es;q=0.9",
-                "Sec-Fetch-Dest": "document",
-                "Sec-Fetch-Mode": "navigate",
-                "Sec-Fetch-Site": "same-origin",
-                "Sec-Fetch-User": "?1",
-            }, timeout=15)
-            print(f"https://jkanime.net/{name_anime}")
+            url = f"https://jkanime.net/{name_anime}"
+            api_key = os.getenv("SCRAPING_API_KEY")
+            response = requests.get(f"https://api.webscraping.ai/html?api_key={api_key}&url={url}&js=false&proxy=datacenter")
 
             if response.status_code == 200:
-                print("¡Conexión exitosa! El navegador se abrió correctamente.")
+                print("¡Conexión exitosa!")
                 html = response.text
 
                 calidad = re.search(r'<span>Calidad:</span>\s*([\w\s]+)', html)
@@ -179,15 +167,9 @@ class Anime():
     
     def Caps_1080(self, name_anime, cap):
         try:
-            response = curl_requests.get(f"https://jkanime.net/{name_anime}", impersonate="chrome110",
-            headers={
-                "Referer": "https://jkanime.net/",
-                "Accept-Language": "es-ES,es;q=0.9",
-                "Sec-Fetch-Dest": "document",
-                "Sec-Fetch-Mode": "navigate",
-                "Sec-Fetch-Site": "same-origin",
-                "Sec-Fetch-User": "?1",
-            }, timeout=15)
+            url = f"https://jkanime.net/{name_anime}"
+            api_key = os.getenv("SCRAPING_API_KEY")
+            response = requests.get(f"https://api.webscraping.ai/html?api_key={api_key}&url={url}&js=false&proxy=datacenter")
             html = response.text
 
             if response.status_code == 200:
