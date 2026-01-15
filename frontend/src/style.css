@@ -405,7 +405,8 @@ body {
 }
 
 .episodes-list li img {
-    height: auto;
+    width: 240px;
+    height: 135px;
     object-fit: cover;
     border-radius: 10px;
 }
