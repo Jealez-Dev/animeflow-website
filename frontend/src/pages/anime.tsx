@@ -19,6 +19,7 @@ function anime() {
     const [score, setScore] = useState('');
     const [calidad, setCalidad] = useState('');
     const [estado, setEstado] = useState('');
+    const [fecha, setFecha] = useState('');
     const [loading, setLoading] = useState(true);
 
     const fetchAnimes = async () => {
@@ -37,6 +38,7 @@ function anime() {
                 setScreenshots(info_capitulos.Screen);
                 setCalidad(data.Calidad);
                 setEstado(data.Estado);
+                setFecha(data.Fecha);
                 setLoading(false);
             })
     };
@@ -122,8 +124,11 @@ function anime() {
                         </div>
                         <ul className="episodes-list">
                             {cap.map((ep, index) => (
-                                <li key={ep} onClick={() => navigate(`/ver/${id}-${ep}`)}><img src={screenshots[index]} alt={ep}></img><a>Episodio{ep}</a></li>
+                                <li key={ep} onClick={() => navigate(`/ver/${id}-${ep}`)}><img src={screenshots[index]} alt={ep}></img><a>Episodio {ep}</a></li>
                             ))}
+                            {estado ? (
+                                <li onClick={() => navigate(`#`)}><img src={animes[0].Img} alt={animes[0].Titulo}></img><a>Proximo Capitulo: {fecha.split('T')[0]}</a></li>
+                            ) : null}
                         </ul>
                     </section>
 

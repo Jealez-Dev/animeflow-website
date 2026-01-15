@@ -63,7 +63,7 @@ class Anime():
 
                 return listadoAnimes
             else:
-                print("Error al obtener la página web")
+                print("Estado de la pagina web: ", response.status_code)
             
         except Exception as e:
             print(e)

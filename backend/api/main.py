@@ -93,10 +93,10 @@ async def anime(anime: Anime):
                 "date_next_cap": fecha_next_cap.isoformat() if fecha_next_cap else None,
                 "Capitulos": caps_actuales
             }).execute()
-        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"]}
+        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"], "Fecha": fecha_next_cap.isoformat() if fecha_next_cap else None}
     else:
         anime_info = response.data["info"]
-        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"]}
+        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"], "Fecha": response.data["date_next_cap"]}
 
 
 @app.post("/api/SeleccionCap")
