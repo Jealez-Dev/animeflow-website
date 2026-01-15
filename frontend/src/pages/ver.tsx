@@ -138,8 +138,11 @@ function ver() {
     const extraerServidoresHD = async () => {
         const url = id?.slice(0, id.lastIndexOf('-'))
         const cap = id?.match(/\d+$/)?.[0]
-        const response = await fetch(`/proxy/${url}/${cap}`)
+        const urlObjetivo = `https://jkanime.net/${url}/${cap}`
+        const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(urlObjetivo)}`)
+        console.log("Status del Proxy:", response.status);
         const data = await response.json()
+        console.log("Contenido crudo del Proxy:", data.contents);
         const regex = /video\[\d+\]\s*=\s*'<iframe.*?src="([^"]+)"/g;
 
         let servidoresHD = []
@@ -149,7 +152,7 @@ function ver() {
             servidoresHD.push(match[1])
         }
 
-        console.log(servidoresHD)
+        console.log("servidoresHD -->", servidoresHD)
     }
 
 

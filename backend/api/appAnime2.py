@@ -1,3 +1,4 @@
+import cloudscraper
 import requests
 import re
 import json
@@ -282,3 +283,45 @@ class Anime():
                 print("Error al obtener la página web")
         except Exception as e:
             print(e)
+
+    def servidoresHDAnimeFelix(self, name_anime):
+        try:
+            scraper = cloudscraper.create_scraper()
+
+            response = scraper.get(f"https://animefenix2.tv/ver/{name_anime}")
+            if response.status_code == 200:
+                html = response.text
+
+                pattern = r"tabsArray\['(\d+)'\]\s*=\s*\"(.*?)\";"
+                matches = re.findall(pattern, html)
+
+                links_encontrados = []
+
+                if not matches:
+                    print("No se encontraron servidores. Verifica el acceso al HTML.")
+                else:
+                    for index, iframe_html in matches:
+                        # 2. Extraemos el 'src' dentro del string del iframe
+                        src_match = re.search(r"src='(.*?)'", iframe_html)
+                        if src_match:
+                            full_src = src_match.group(1)
+            
+                            # 3. Limpiamos el link de redirección para obtener la fuente real
+                            # El link real está después de 'id='
+                            if 'redirect.php?id=' in full_src:
+                                real_source = full_src.split('redirect.php?id=')[-1]
+                                links_encontrados.append({
+                                    "server_index": index,
+                                    "url": real_source
+                                })
+
+                # 4. Mostrar resultados (Aquí es donde eliges el 1080p)
+                for item in links_encontrados:
+                    print(f"Servidor {item['server_index']}: {item['url']}")
+            else:
+                print("Error al obtener la página web", response.status_code)
+        except Exception as e:
+            print(e)
+
+anime = Anime()
+anime.servidoresHDAnimeFelix("ore-dake-level-up-na-ken-1")
