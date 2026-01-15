@@ -2,11 +2,11 @@ from . import appAnime2
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union, List
 from fastapi.staticfiles import StaticFiles
 from supabase import create_client, Client
 from dotenv import load_dotenv
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import os
 
 app = FastAPI()
@@ -18,8 +18,14 @@ supabase_key = os.getenv("SUPABASE_KEY")
 supabase = create_client(supabase_url, supabase_key)
 
 class Anime(BaseModel):
-    nombre_anime: str
+    nombre_anime: Optional[str] = None
     selectEP: Optional[str] = None
+    year: Optional[Union[List[str], str]] = None
+    genre: Optional[Union[List[str], str]] = None
+    type_anime: Optional[Union[List[str], str]] = None
+    status: Optional[Union[List[str], str]] = None
+    order: Optional[str] = None
+    page: Optional[str] = None
 
 app.add_middleware(
     CORSMiddleware,
@@ -33,6 +39,13 @@ async def anime(anime: Anime):
     animeAPP = appAnime2.Anime()
     return {"listado": animeAPP.listado_anime(anime.nombre_anime)}
 
+@app.post("/api/Directorio")
+async def anime(anime: Anime):
+    animeAPP = appAnime2.Anime()
+    print(anime)
+    results = animeAPP.Buscar_anime(anime.nombre_anime,anime.year, anime.genre, anime.type_anime, anime.status, anime.order, anime.page)
+    return {"listado": results, "Page": results["Page"]}
+
 @app.post("/api/SeleccionAnime")
 async def anime(anime: Anime):
     animeAPP = appAnime2.Anime()
@@ -43,13 +56,17 @@ async def anime(anime: Anime):
     if response is None or response.data is None:
         actualizar = True
     else:
-        if response.data["estado"] == "En emision":
+        if response.data["estado"] == True:
             fechaActual = datetime.now(timezone.utc)
             fecha_next_cap = datetime.fromisoformat(response.data["date_next_cap"].replace("Z", "+00:00"))
             esHoy = fechaActual >= fecha_next_cap
+            print("Fecha actual: ", fechaActual)
+            print("Fecha next cap: ", fecha_next_cap)
+            print("Es hoy: ", esHoy)
 
             if esHoy:
                 actualizar = True
+                print("Si es hoy")
         
         caps_guardados = response.data["Capitulos"]
 
@@ -67,7 +84,7 @@ async def anime(anime: Anime):
             if caps_actuales > caps_guardados:
                 fecha_next_cap = datetime.fromisoformat(anime_info[0]["Date"]).replace(tzinfo=timezone.utc)
             else:
-                fecha_next_cap = (datetime.now(timezone.utc) + timedelta(hours=8)).replace(tzinfo=timezone.utc)
+                fecha_next_cap = (datetime.now(timezone.utc) + timedelta(hours=2)).replace(tzinfo=timezone.utc)
             
         supabase.table("animes").upsert({
                 "slug": anime.nombre_anime,

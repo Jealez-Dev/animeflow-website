@@ -13,15 +13,26 @@ class Anime():
     def __init__(self):
         load_dotenv()
 
-    def Buscar_anime(self, name_anime):
+    def Buscar_anime(self, name_anime=None, year=None, genre=None, type=None, status=None, order=None, page=None):
         try:
-            name_anime = name_anime.replace(" ", "-")
-            response = requests.get(f"https://www3.animeflv.net/browse?q={name_anime}")
+            params = {
+                "q": name_anime or None,
+                "year[]": year or None,
+                "genre[]": genre or None,
+                "type[]": type or None,
+                "status[]": status or None,
+                "order": order or None,
+                "page": page or None
+            }
+            response = requests.get(f"https://www3.animeflv.net/browse", params=params)
+            print(response.url)
+            open("response.html", "w", encoding="utf-8").write(response.text)
             print("¡Conexión exitosa! El navegador se abrió correctamente.")
             listadoAnimes = []
             titulos = []
             imgs = []
             links = []
+            TotalPage = 0
 
             if response.status_code == 200:
                 html = response.text
@@ -42,7 +53,13 @@ class Anime():
                     link = link.group(1)
                     links.append(link)
 
-                listadoAnimes = ({"Titulo": titulos, "Img": imgs, "Link": links})
+                pageMatch = re.findall(r'[?&]page=(\d+)(?="|&)', html, re.DOTALL)
+                if not pageMatch:
+                   TotalPage = 1
+                
+                TotalPage = max([int(page) for page in pageMatch])
+
+                listadoAnimes = ({"Titulo": titulos, "Img": imgs, "Link": links, "Page": TotalPage})
 
 
                 return listadoAnimes

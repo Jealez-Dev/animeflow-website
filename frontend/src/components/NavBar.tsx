@@ -38,7 +38,7 @@ function NavBar() {
                 {mediaQuery.matches ? null : ( /* Elimina los textos en la version mobile */
                     <ul className="header-nav-list">
                         <li><Link to="/">Inicio</Link></li>
-                        <li><Link to="/construction">Directorio</Link></li>
+                        <li><Link to="/directorio">Directorio</Link></li>
                     </ul>
                 )}
                 {mediaQuery.matches ? showSearch ? /* Solo se muestra cuando el estado es verdadero */
