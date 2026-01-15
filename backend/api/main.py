@@ -72,16 +72,14 @@ async def anime(anime: Anime):
         supabase.table("animes").upsert({
                 "slug": anime.nombre_anime,
                 "info": anime_info,
-                "calidad": anime_info[0]["Calidad"],
                 "estado": anime_info[0]["Estado"],
                 "date_next_cap": fecha_next_cap.isoformat() if fecha_next_cap else None,
                 "Capitulos": caps_actuales
             }).execute()
-        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"], "Calidad": anime_info[0]["Calidad"]}
+        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"]}
     else:
         anime_info = response.data["info"]
-        calidad = response.data["calidad"]
-        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"], "Calidad": calidad}
+        return {"Informacion": anime_info, "Estado": anime_info[0]["Estado"]}
 
 
 @app.post("/api/SeleccionCap")
@@ -99,7 +97,8 @@ async def anime(anime: Anime):
         return {"Url": links}
     else:
         links = response.data["links"]
-        return {"Url": links}
+        cantCap = supabase.table("animes").select("Capitulos").eq("slug", anime.nombre_anime).maybe_single().execute()
+        return {"Url": links, "CantCap": cantCap.data["Capitulos"]}
 
 @app.get("/api/AnimeRandom")
 async def anime():

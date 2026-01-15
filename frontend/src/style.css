@@ -251,7 +251,7 @@ body {
     min-height: 80vh;
     background-image: linear-gradient(to right, rgba(45, 20, 94, 1) 30%, rgba(43, 16, 119, 0.1) 70%), var(--bg-image);
     background-size: cover;
-    background-position: bottom;
+    background-position: left center;
     background-repeat: no-repeat;
     justify-content: flex-start;
     align-items: center;
@@ -297,8 +297,6 @@ body {
 .anime-item-info {
     display: flex;
     flex-direction: row;
-    width: 300px;
-    flex-wrap: wrap;
     gap: 1rem;
     margin: 0;
 }
@@ -326,18 +324,6 @@ body {
     font-size: 1rem;
     font-weight: 500;
     color: var(--tertiary-color);
-}
-
-.calidad svg {
-    width: 30px;
-    height: 30px;
-}
-
-.estado {
-    font-family: 'Google Sans', sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    margin-top: 0 !important;
 }
 
 .emitiendo {
@@ -535,7 +521,7 @@ body {
 .btns-caps {
     position: absolute;
     top: 50%;
-    z-index: 11;
+    z-index: 10;
     display: flex;
     justify-content: space-between;
     width: 98%;

@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
-import SvgHd from "../components/svg_hd";
 
 interface Anime {
     Titulo: string;
@@ -42,7 +41,7 @@ function anime() {
             })
     };
 
-    const fetchWallpaper = async () => {
+    const fetchDatosAnime = async () => {
         fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(id || '')}&limit=1`, {
             method: 'GET',
             headers: {
@@ -51,9 +50,26 @@ function anime() {
         })
             .then((response) => response.json())
             .then((data) => {
-                setImagenes(data.data[0].images.webp.large_image_url);
                 setMadurez(data.data[0].rating);
                 setScore(data.data[0].score);
+            })
+    };
+
+    const fetchWallpaper = async () => {
+        fetch(`https://api-anime-steel.vercel.app/meta/anilist/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                const cover = data.results[0].cover
+                if (cover == null) {
+                    setImagenes(data.results[0].image)
+                } else {
+                    setImagenes(data.results[0].cover)
+                }
             })
     };
 
@@ -71,15 +87,11 @@ function anime() {
         if (madurez.includes('Rx')) return 'Adulto';
     };
 
-    const resoluciones = () => {
-        if (calidad == null) return '480p';
-        return calidad === '1080p' ? <SvgHd isHd={true} /> : <SvgHd isHd={false} />;
-    };
-
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchAnimes();
+        fetchDatosAnime();
         fetchWallpaper();
     }, []);
     return (
@@ -96,7 +108,6 @@ function anime() {
                                 <div className="anime-item-info">
                                     <p className="rating">Madurez: {clasificacionEdad()}</p>
                                     <p className="score">Score: {score}</p>
-                                    <span className="calidad">Calidad: {resoluciones()}</span>
                                     <p className="estado">Estado: <span className={estado ? "emitiendo" : "finish"}>{estado ? "En Emisión" : 'Finalizado'}</span></p>
                                 </div>
                                 <p>{animes[0].Sipnosis}</p>

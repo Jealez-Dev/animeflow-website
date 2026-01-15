@@ -115,7 +115,8 @@ class Anime():
                 print("Date fa-calendar" in html) # ¿Existe la clase?
 
                 date_next_ep = ""
-                estado, calidad = self.estadoAnime(name_anime)
+                estado = re.search(r'<span class="fa-tv">(.*?)</span>', html)
+                estado = estado.group(1)
                 print(estado)
                 if estado == "En emision":
                     print("paso por aca")
@@ -127,57 +128,11 @@ class Anime():
                 else:
                     estado = False
 
-            info.append({"Titulo": titulo, "Sipnosis": sipnosis1, "Img": imgs, "Estado": estado, "Calidad": calidad, "Cap": listEps, "Date": date_next_ep})
+            info.append({"Titulo": titulo, "Sipnosis": sipnosis1, "Img": imgs, "Estado": estado, "Cap": listEps, "Date": date_next_ep})
             return info 
         except Exception as e:
             print(e)
-
-    def estadoAnime(self, name_anime):
-        try:
-            url = f"https://jkanime.net/{name_anime}"
-            api_key = os.getenv("SCRAPING_API_KEY")
-            response = requests.get(f"https://api.webscraping.ai/html?api_key={api_key}&url={url}&js=false&proxy=residential&country=es")
-            if response.status_code == 200:
-                estado = re.search(r'<span>Estado:<\/span>\s*<div[^>]*>([^<]+)<\/div>', response.text)
-                print(estado.group(1))
-
-                calidad = re.search(r'<span>Calidad:</span>\s*([\w\s]+)', response.text)
-                calidad = calidad.group(1) if calidad else "1080p"
-                return calidad, estado.group(1)
-
-            else:
-                return False
-        except Exception as e:
-            print(e)
-    
-    def Caps_1080(self, name_anime, cap):
-        try:
-            url = f"https://jkanime.net/{name_anime}/{cap}"
-            api_key = os.getenv("SCRAPING_API_KEY")
-            response = requests.get(f"https://api.webscraping.ai/html?api_key={api_key}&url={url}&js=false&proxy=datacenter")
-            html = response.text
-
-            if response.status_code == 200:
-                html = response.text
-
-                encontrados = re.findall(r"video\[\d+\]\s*=\s*['\"](<iframe.*?>)<\/iframe>['\"]\s*;", html)
-    
-                if encontrados: 
-                    links_limpios = []
-                    for item in encontrados:
-                        src_match = re.search(r'src="([^"]+)"', item)
-                        if src_match:
-                            links_limpios.append(src_match.group(1))
-        
-                    return links_limpios
-                else:
-                    print("Error al obtener la página web", response.status_code)
-
-            else:
-                print("Error al obtener la página web", response.status_code)   
-        except Exception as e:
-            print(e)
-        
+      
     def select_cap(self, name_anime):
         try:
             info = []
@@ -195,6 +150,14 @@ class Anime():
 
                 for s in lista_servidores:
                     info.append({"nombre": s.get('title'), "url": s.get('code')})
+
+                serverHD = self.servidoresHDAnimeFelix(name_anime)
+                for item in serverHD:
+                    if "mp4upload.com" in item.get('url'):
+                        info.append({"nombre": "Mp4upload 1080p", "url": item.get('url')})
+                    elif "ironhentai.com" in item.get('url'):
+                        if item.get('server_index') == "1":
+                            info.append({"nombre": "Ironhentai 1080p", "url": item.get('url')})
 
                 return info
             else:
@@ -224,7 +187,6 @@ class Anime():
                     i = i.group(1)
                     portada = f"https://www3.animeflv.net/{i}"
 
-                sipnosis = ""
                 sipnosisMatch = re.finditer(r'<div class="Description">.*?<p>.*?</p>.*?<p>(.*?)</p>', html, re.DOTALL)
                 
                 descripcion = ""
@@ -315,13 +277,8 @@ class Anime():
                                     "url": real_source
                                 })
 
-                # 4. Mostrar resultados (Aquí es donde eliges el 1080p)
-                for item in links_encontrados:
-                    print(f"Servidor {item['server_index']}: {item['url']}")
+                return links_encontrados
             else:
                 print("Error al obtener la página web", response.status_code)
         except Exception as e:
             print(e)
-
-anime = Anime()
-anime.servidoresHDAnimeFelix("ore-dake-level-up-na-ken-1")

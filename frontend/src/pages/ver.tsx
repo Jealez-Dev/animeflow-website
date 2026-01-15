@@ -34,11 +34,12 @@ function ver() {
             .then(response => response.json())
             .then((data) => {
                 setUrls(data.Url)
+                setCapitulos(data.CantCap)
                 setLoading(false);
             });
     };
 
-    const fetchCapitulos = async (anime: string) => {
+    const fetchTitulo = async (anime: string) => {
         fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(anime || '')}&limit=1`, {
             method: 'GET',
             headers: {
@@ -47,7 +48,6 @@ function ver() {
         })
             .then((response) => response.json())
             .then((data) => {
-                setCapitulos(data.data[0].episodes)
                 setTitulo(data.data[0].title)
                 setLoading(false);
             })
@@ -135,35 +135,12 @@ function ver() {
         item => item.nombre === server
     )
 
-    const extraerServidoresHD = async () => {
-        const url = id?.slice(0, id.lastIndexOf('-'))
-        const cap = id?.match(/\d+$/)?.[0]
-        const urlObjetivo = `https://jkanime.net/${url}/${cap}`
-        const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(urlObjetivo)}`)
-        console.log("Status del Proxy:", response.status);
-        const data = await response.json()
-        console.log("Contenido crudo del Proxy:", data.contents);
-        const regex = /video\[\d+\]\s*=\s*'<iframe.*?src="([^"]+)"/g;
-
-        let servidoresHD = []
-        let match;
-
-        while (match = regex.exec(data)) {
-            servidoresHD.push(match[1])
-        }
-
-        console.log("servidoresHD -->", servidoresHD)
-    }
-
-
-
     disableNavBtns()
 
     useEffect(() => {
         fetchCap();
-        fetchCapitulos(id ? id?.slice(0, id.lastIndexOf('-')) : '');
-        extraerServidoresHD()
-        console.log(urls)
+        fetchTitulo(id ? id?.slice(0, id.lastIndexOf('-')) : '');
+        setLoading(true)
     }, [id, episodio]);
 
     useEffect(() => {
